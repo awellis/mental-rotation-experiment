@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mental Rotation Experiment</title>
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
+    <link href="jspsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  </head>
+  <body>
+
+
+  </body>
+
+  <script>
+
+      /* create timeline */
+      var timeline = [];
+
+      /* define welcome message trial */
+      var welcome = {
+        type: "html-keyboard-response",
+        stimulus: "Welcome to the Mental Rotation Experiment experiment. Press any key to begin."
+      };
+      timeline.push(welcome);
+
+      /* define the self rotation instruction trial */
+      var self_instruction = {
+        type: "html-keyboard-response",
+        stimulus: "Self Instruction",
+        post_trial_gap: 2000
+      };
+      timeline.push(self_instruction);
+
+      /* define the object rotation instruction trial */
+      var self_instruction = {
+        type: "html-keyboard-response",
+        stimulus: "Self Instruction",
+        post_trial_gap: 2000
+      };
+      timeline.push(self_instruction);
+
+      /* start the experiment */
+      jsPsych.init({
+        timeline: timeline
+      });
+    </script>
+
+
+</html>
