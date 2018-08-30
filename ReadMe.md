@@ -1,1 +1,2 @@
-"First version of mental rotation in jsPsych" 
+Mental Rotation Readme 
+Use mentalRotation.html 
