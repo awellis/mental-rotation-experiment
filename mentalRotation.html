@@ -7,7 +7,9 @@
     <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
     <script src="jspsych/plugins/jspsych-image-keyboard-response.js"></script>
   	<script src="jspsych/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych/plugins/jspsych-survey-multi-choice.js"></script>
     <link href="jspsych/css/mentalRotation.css" rel="stylesheet" type="text/css"></link>
+    <meta charset="ISO-8859-1">
   </head>
   <body style = "background-color: #404040; color: #f9f9f9">
 
@@ -18,6 +20,7 @@
       /* create timeline */
       var timeline = [];
 
+      /* define subject id */
       var subject_id = jsPsych.randomization.randomID(15);
 
       jsPsych.data.addProperties({
@@ -31,10 +34,25 @@
       };
       timeline.push(welcome);
 
+      /* define sex variable */
+      var subject_sex_choice = ['Männlich','Weiblich'];
+
+      var subject_sex = {
+        type: 'survey-multi-choice',
+        questions: [{prompt: 'Bitte geben Sie Ihr Geschlecht an: ', options: subject_sex_choice, required: true}],
+        on_finish: function(data) {
+          var responses = JSON.parse(data.responses);
+          var selected_sex = responses.Q0;
+          jsPsych.data.addProperties({sex: selected_sex});
+        }
+      };
+
+      timeline.push(subject_sex);
+
       /* define the self rotation instruction trial */
       var self_instruction = {
         type: "html-keyboard-response",
-        stimulus: "Self Instruction",
+        stimulus: "Self Instruction. Press any key to continue",
         post_trial_gap: 1000
       };
       timeline.push(self_instruction);
@@ -62,7 +80,7 @@
         { stimulus: 'img/0_330.png', data: {condition: 'self', correct_response: 'f'} },
         { stimulus: 'img/0_60.png', data: {condition: 'self', correct_response: 'j'}  },
         { stimulus: 'img/0_90.png', data: {condition: 'self', correct_response: 'j'} },
-
+/*
         { stimulus: 'img/120_150.png', data: {condition: 'self', correct_response: 'f'}  },
         { stimulus: 'img/120_180.png', data: {condition: 'self', correct_response: 'j'} },
         { stimulus: 'img/120_210.png', data: {condition: 'self', correct_response: 'j'}  },
@@ -110,7 +128,7 @@
         { stimulus: 'img/L30_180.png', data: {condition: 'self', correct_response: 'f'} },
         { stimulus: 'img/L60_180.png', data: {condition: 'self', correct_response: 'f'} },
         { stimulus: 'img/L90_180.png', data: {condition: 'self', correct_response: 'f'} }
-
+*/
       ];
 
       var self_exp = {
@@ -134,7 +152,7 @@
       /* define the object rotation instruction trial */
       var object_instruction = {
         type: "html-keyboard-response",
-        stimulus: "Object Instruction",
+        stimulus: "Object Instruction. Press any key to continue",
         post_trial_gap: 1000
       };
       timeline.push(object_instruction);
@@ -217,7 +235,7 @@
         repetitions: 1
       }
 
-      timeline.push(object_procedure);
+    /*  timeline.push(object_procedure); */
 
       /* start the experiment */
       jsPsych.init({
