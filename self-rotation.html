@@ -11,6 +11,7 @@
     <link href="jspsych/css/mentalRotation.css" rel="stylesheet" type="text/css"></link>
     <meta charset="ISO-8859-1">
   </head>
+
   <body style = "background-color: #404040; color: #f9f9f9">
 
 
@@ -20,19 +21,45 @@
       /* create timeline */
       var timeline = [];
 
-      /* define subject id */
-      var subject_id = jsPsych.randomization.randomID(15);
-
-      jsPsych.data.addProperties({
-        subject: subject_id
-      });
+      /* TODO: define subject id */
+      // var subject_id = jsPsych.randomization.randomID(15);
+      //
+      // jsPsych.data.addProperties({
+      //   subject: subject_id
+      // });
 
       /* define welcome message trial */
       var welcome = {
         type: "html-keyboard-response",
-        stimulus: "Welcome to the Mental Rotation Experiment experiment. Press any key to begin."
+        stimulus: "<p>Welcome to the Mental Rotation Experiment.</p> <p>Press any key to begin.</p>"
       };
       timeline.push(welcome);
+
+      /* define ID variable */
+      var subject_id = {
+        type: 'survey-text',
+        questions: [{prompt:"Please enter your ID"}],
+        on_finish: function(data){
+          var responses_id = JSON.parse(data.responses);
+          subject_id = responses_id.Q0;
+          jsPsych.data.addProperties({subject: subject_id});
+        }
+      };
+      timeline.push(subject_id);
+
+      /* define session variable */
+      var session = {
+        type: 'survey-text',
+        questions: [{prompt:"Please enter the session number"}],
+        on_finish: function(data){
+          var responses_session = JSON.parse(data.responses);
+          session = responses_session.Q0;
+          jsPsych.data.addProperties({subject: session});
+        }
+      };
+      timeline.push(session);
+
+
 
       /* define sex and handedness variable */
       var subject_sex_choice = ['male','female'];
@@ -54,20 +81,21 @@
       /* define age variable */
       var subject_age = {
         type: 'survey-text',
-        questions: [{prompt:"Please enter your birthyear"}],
+        questions: [{prompt:"Please enter your age"}],
         on_finish: function(data){
           var responses_age = JSON.parse(data.responses);
           age = responses_age.Q0;
-          jsPsych.data.addProperties({birthyear: age});
+          jsPsych.data.addProperties({age: age});
         }
       };
       timeline.push(subject_age);
 
+      // TODO: instructions for egocentric rotation
       /* define the self rotation instruction trial */
       var self_instruction = {
         type: "html-keyboard-response",
-        stimulus: "Self Instruction. Press any key to continue",
-        post_trial_gap: 1000
+        stimulus: "<p>Imagine that <strong>the table remains stationary</strong>, while you move around it to the tip of the arrow and look across the center of the table from there. </p> <p>Then, decide whether the ball is be to your left or your right.</p>",
+        post_trial_gap: 2000
       };
       timeline.push(self_instruction);
 
@@ -77,7 +105,8 @@
         stimulus: '<div style="font-size:60px;">+</div>',
         choices: jsPsych.NO_KEYS,
         trial_duration: function(){
-          return jsPsych.randomization.sampleWithoutReplacement([150, 200, 250, 300, 350, 400, 450, 500], 1)[0];
+          return jsPsych.randomization.sampleWithoutReplacement([300, 350, 400, 450, 500], 1)[0];
+          // return jsPsych.randomization.sampleWithoutReplacement([150, 200, 250, 300, 350, 400, 450, 500], 1)[0];
         },
         data: {test_part: 'fixation'}
       }
@@ -162,98 +191,11 @@
 
       timeline.push(self_procedure);
 
-      /* define the object rotation instruction trial */
-      var object_instruction = {
-        type: "html-keyboard-response",
-        stimulus: "Object Instruction. Press any key to continue",
-        post_trial_gap: 1000
-      };
-      timeline.push(object_instruction);
-
-      /* define the self rotation trials */
-      var object_stimuli = [
-          { stimulus: 'img/0_120.png', data: {condition: 'object', correct_response: 'j', angle: '0'} },
-          { stimulus: 'img/0_150.png', data: {condition: 'object', correct_response: 'j', angle: '0'}  },
-          { stimulus: 'img/0_210.png', data: {condition: 'object', correct_response: 'f', angle: '0'} },
-          { stimulus: 'img/0_240.png', data: {condition: 'object', correct_response: 'f', angle: '0'}  },
-          { stimulus: 'img/0_270.png', data: {condition: 'object', correct_response: 'f', angle: '0'}  },
-          { stimulus: 'img/0_30.png', data: {condition: 'object', correct_response: 'j', angle: '0'} },
-          { stimulus: 'img/0_300.png', data: {condition: 'object', correct_response: 'f', angle: '0'}  },
-          { stimulus: 'img/0_330.png', data: {condition: 'object', correct_response: 'f', angle: '0'} },
-          { stimulus: 'img/0_60.png', data: {condition: 'object', correct_response: 'j', angle: '0'}  },
-          { stimulus: 'img/0_90.png', data: {condition: 'object', correct_response: 'j', angle: '0'} },
-
-          { stimulus: 'img/120_150.png', data: {condition: 'object', correct_response: 'j', angle: '120'}  },
-          { stimulus: 'img/120_180.png', data: {condition: 'object', correct_response: 'f', angle: '120'} },
-          { stimulus: 'img/120_210.png', data: {condition: 'object', correct_response: 'f', angle: '120'}  },
-          { stimulus: 'img/120_270.png', data: {condition: 'object', correct_response: 'j', angle: '120'} },
-          { stimulus: 'img/120_30.png', data: {condition: 'object', correct_response: 'f', angle: '120'}  },
-          { stimulus: 'img/120_330.png', data: {condition: 'object', correct_response: 'j', angle: '120'} },
-          { stimulus: 'img/120_90.png', data: {condition: 'object', correct_response: 'f', angle: '120'}  },
-
-          { stimulus: 'img/150_120.png', data: {condition: 'object', correct_response: 'f', angle: '150'} },
-          { stimulus: 'img/150_180.png', data: {condition: 'object', correct_response: 'f', angle: '150'}  },
-          { stimulus: 'img/150_240.png', data: {condition: 'object', correct_response: 'j', angle: '150'} },
-          { stimulus: 'img/150_270.png', data: {condition: 'object', correct_response: 'j', angle: '150'}  },
-          { stimulus: 'img/150_300.png', data: {condition: 'object', correct_response: 'j', angle: '150'} },
-          { stimulus: 'img/150_60.png', data: {condition: 'object', correct_response: 'f', angle: '150'}  },
-          { stimulus: 'img/150_90.png', data: {condition: 'object', correct_response: 'f', angle: '150'} },
-
-          { stimulus: 'img/30_120.png', data: {condition: 'object', correct_response: 'j', angle: '30'}  },
-          { stimulus: 'img/30_180.png', data: {condition: 'object', correct_response: 'f', angle: '30'} },
-          { stimulus: 'img/30_240.png', data: {condition: 'object', correct_response: 'f', angle: '30'}  },
-          { stimulus: 'img/30_270.png', data: {condition: 'object', correct_response: 'f', angle: '30'} },
-          { stimulus: 'img/30_300.png', data: {condition: 'object', correct_response: 'f', angle: '30'}  },
-          { stimulus: 'img/30_60.png', data: {condition: 'object', correct_response: 'j', angle: '30'} },
-          { stimulus: 'img/30_90.png', data: {condition: 'object', correct_response: 'j', angle: '30'}  },
-
-          { stimulus: 'img/60_150.png', data: {condition: 'object', correct_response: 'j', angle: '60'} },
-          { stimulus: 'img/60_180.png', data: {condition: 'object', correct_response: 'f', angle: '60'}  },
-          { stimulus: 'img/60_210.png', data: {condition: 'object', correct_response: 'f', angle: '60'} },
-          { stimulus: 'img/60_270.png', data: {condition: 'object', correct_response: 'f', angle: '60'}  },
-          { stimulus: 'img/60_30.png', data: {condition: 'object', correct_response: 'f', angle: '60'} },
-          { stimulus: 'img/60_330.png', data: {condition: 'object', correct_response: 'j', angle: '60'}  },
-          { stimulus: 'img/60_90.png', data: {condition: 'object', correct_response: 'j', angle: '60'} },
-
-          { stimulus: 'img/90_120.png', data: {condition: 'object', correct_response: 'j', angle: '90'}  },
-          { stimulus: 'img/90_150.png', data: {condition: 'object', correct_response: 'j', angle: '90'} },
-          { stimulus: 'img/90_180.png', data: {condition: 'object', correct_response: 'f', angle: '90'}  },
-          { stimulus: 'img/90_210.png', data: {condition: 'object', correct_response: 'f', angle: '90'} },
-          { stimulus: 'img/90_240.png', data: {condition: 'object', correct_response: 'f', angle: '90'}  },
-          { stimulus: 'img/90_30.png', data: {condition: 'object', correct_response: 'f', angle: '90'} },
-          { stimulus: 'img/90_300.png', data: {condition: 'object', correct_response: 'j', angle: '90'}  },
-          { stimulus: 'img/90_330.png', data: {condition: 'object', correct_response: 'j', angle: '90'} },
-          { stimulus: 'img/90_60.png', data: {condition: 'object', correct_response: 'f', angle: '90'}  },
-
-          { stimulus: 'img/L120_180.png', data: {condition: 'object', correct_response: 'j', angle: '120'} },
-          { stimulus: 'img/L150_180.png', data: {condition: 'object', correct_response: 'j', angle: '150'} },
-          { stimulus: 'img/L30_180.png', data: {condition: 'object', correct_response: 'j', angle: '30'} },
-          { stimulus: 'img/L60_180.png', data: {condition: 'object', correct_response: 'j', angle: '60'} },
-          { stimulus: 'img/L90_180.png', data: {condition: 'object', correct_response: 'j', angle: '90'} }
-      ];
-
-      var object_exp = {
-        type: "image-keyboard-response",
-        stimulus: jsPsych.timelineVariable('stimulus'),
-        choices: ['f', 'j'],
-        stimulus_duration: 3000,
-        trial_duration: 3000,
-        data: jsPsych.timelineVariable('data')
-      }
-
-      var object_procedure = {
-        timeline: [fixation, object_exp],
-        timeline_variables: object_stimuli,
-        randomize_order: true,
-        repetitions: 1
-      }
-
-     timeline.push(object_procedure);
 
       /* start the experiment */
       jsPsych.init({
         timeline: timeline,
-        on_finish: function() { jsPsych.data.get().localSave('csv','MR_subj_' + subject_id + '.csv');
+        on_finish: function() { jsPsych.data.get().localSave('csv','self_' + subject_id + '_' + session + '.csv');
       }
       });
 
