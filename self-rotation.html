@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Mental Rotation Experiment</title>
+    <title>Self Rotation Experiment</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jspsych/jspsych.js"></script>
     <script src="jspsych/plugins/jspsych-html-keyboard-response.js"></script>
@@ -11,17 +11,15 @@
     <link href="jspsych/css/mentalRotation.css" rel="stylesheet" type="text/css"></link>
     <meta charset="ISO-8859-1">
   </head>
-
   <body style = "background-color: #404040; color: #f9f9f9">
-
 
   </body>
 
   <script>
+
       /* create timeline */
       var timeline = [];
 
-      /* TODO: define subject id */
       // var subject_id = jsPsych.randomization.randomID(15);
       //
       // jsPsych.data.addProperties({
@@ -92,12 +90,12 @@
 
       // TODO: instructions for egocentric rotation
       /* define the self rotation instruction trial */
-      var self_instruction = {
+      var instructions = {
         type: "html-keyboard-response",
-        stimulus: "<p>Imagine that <strong>the table remains stationary</strong>, while you move around it to the tip of the arrow and look across the center of the table from there. </p> <p>Then, decide whether the ball is be to your left or your right.</p>",
-        post_trial_gap: 2000
+        stimulus: "<p>Imagine that <strong>the table remains stationary</strong>, while you move around it to the tip of the arrow and look across the center of the table from there. </p> <p>Then, decide whether the ball is to your left or your right.</p>",
+        post_trial_gap: 1000
       };
-      timeline.push(self_instruction);
+      timeline.push(instructions);
 
       /* define a fixation cross */
       var fixation = {
@@ -121,7 +119,7 @@
         { stimulus: 'img/0_30.png', data: {condition: 'self', correct_response: 'j', angle: '0'} },
         { stimulus: 'img/0_300.png', data: {condition: 'self', correct_response: 'f', angle: '0'}  },
         { stimulus: 'img/0_330.png', data: {condition: 'self', correct_response: 'f', angle: '0'} },
-        { stimulus: 'img/0_60.png', data: {condition: 'self', correct_response: 'j', angle: '0'}},
+        { stimulus: 'img/0_60.png', data: {condition: 'self', correct_response: 'j', angle: '0'} },
         { stimulus: 'img/0_90.png', data: {condition: 'self', correct_response: 'j', angle: '0'} },
 
         { stimulus: 'img/120_150.png', data: {condition: 'self', correct_response: 'f', angle: '120'}  },
@@ -179,7 +177,10 @@
         choices: ['f', 'j'],
         stimulus_duration: 1000,
         trial_duration: 3000,
-        data: jsPsych.timelineVariable('data')
+        data: jsPsych.timelineVariable('data'),
+        on_finish: function(data){
+        data.correct = data.key_press == jsPsych.pluginAPI.convertKeyCharacterToKeyCode(data.correct_response);
+       }
       }
 
       var self_procedure = {
@@ -191,11 +192,29 @@
 
       timeline.push(self_procedure);
 
+      var debrief_block = {
+        type: "html-keyboard-response",
+        stimulus: function() {
+
+          var trials = jsPsych.data.get().filterCustom(function(x) {return x.test_part != 'fixation'});
+          // var trials = jsPsych.data.get().filter({test_part: ''});
+          var correct_trials = trials.filter({correct: true});
+          var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
+          var rt = Math.round(correct_trials.select('rt').mean());
+
+          return "<p>You responded correctly on "+accuracy+"% of the trials.</p>"+
+          "<p>Your average response time was "+rt+"ms.</p>"+
+          "<p>Press any key to complete the session. Thank you!</p>";
+
+        }
+      };
+
+      timeline.push(debrief_block);
 
       /* start the experiment */
       jsPsych.init({
         timeline: timeline,
-        on_finish: function() { jsPsych.data.get().localSave('csv','self_' + subject_id + '_' + session + '.csv');
+        on_finish: function() { jsPsych.data.get().localSave('csv', 'self_' + subject_id + '_' + session + '.csv');
       }
       });
 
