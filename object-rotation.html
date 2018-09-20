@@ -52,7 +52,7 @@
         on_finish: function(data){
           var responses_session = JSON.parse(data.responses);
           session = responses_session.Q0;
-          jsPsych.data.addProperties({subject: session});
+          jsPsych.data.addProperties({session: session});
         }
       };
       timeline.push(session);
