@@ -29,14 +29,14 @@
       /* define welcome message trial */
       var welcome = {
         type: "html-keyboard-response",
-        stimulus: "<p>Welcome to the Mental Rotation Experiment.</p> <p>Press any key to begin.</p>"
+        stimulus: "<p>Mental Rotation Experiment.</p> <p>Dr&uuml;cke eine beliebige Taste, um anzufangen.</p>"
       };
       timeline.push(welcome);
 
       /* define ID variable */
       var subject_id = {
         type: 'survey-text',
-        questions: [{prompt:"Please enter your ID"}],
+        questions: [{prompt:"Bitte gebe deine ID an"}],
         on_finish: function(data){
           var responses_id = JSON.parse(data.responses);
           subject_id = responses_id.Q0;
@@ -48,7 +48,7 @@
       /* define session variable */
       var session = {
         type: 'survey-text',
-        questions: [{prompt:"Please enter the session number"}],
+        questions: [{prompt:"Bitte gebe die Sessionnummer an"}],
         on_finish: function(data){
           var responses_session = JSON.parse(data.responses);
           session = responses_session.Q0;
@@ -60,12 +60,12 @@
 
 
       /* define sex and handedness variable */
-      var subject_sex_choice = ['male','female'];
-      var handedness_choice = ['right','left', 'ambidextrous'];
+      var subject_sex_choice = ['m','f'];
+      var handedness_choice = ['rechts','links', 'beides'];
 
       var survey_choice = {
         type: 'survey-multi-choice',
-        questions: [{prompt: 'Select your sex: ', options: subject_sex_choice, required: true}, {prompt: 'Handedness: ', options: handedness_choice, required: true}],
+        questions: [{prompt: 'Geschlecht: ', options: subject_sex_choice, required: true}, {prompt: 'H&auml;ndigkeit: ', options: handedness_choice, required: true}],
         on_finish: function(data) {
           var responses = JSON.parse(data.responses);
           var selected_sex = responses.Q0;
@@ -79,7 +79,7 @@
       /* define age variable */
       var subject_age = {
         type: 'survey-text',
-        questions: [{prompt:"Please enter your age"}],
+        questions: [{prompt:"Alter"}],
         on_finish: function(data){
           var responses_age = JSON.parse(data.responses);
           age = responses_age.Q0;
@@ -92,7 +92,7 @@
       /* define the self rotation instruction trial */
       var instructions = {
         type: "html-keyboard-response",
-        stimulus: "<p>Imagine that <strong>the table remains stationary</strong>, while you move around it to the tip of the arrow and look across the center of the table from there. </p> <p>Then, decide whether the ball is to your left or your right.</p>",
+        stimulus: "<p> Stell dir vor, dass der Tisch vor dir station&auml;r ist, und du dich entlang des Pfeils um den Tisch bewegst. Wenn du am Ende des Pfeils angekommen bist, schau zur Tischmitte. </p>  <p>Entscheide dann, ob der Ball von deiner neuen (vorgestellten) Position links oder rechts von dir liegt.</p> <p>Dr&uuml;cke die 'f'-Taste f&uuml;r links, die 'j'-Taste f&uuml;r rechts.</p>",
         post_trial_gap: 1000
       };
       timeline.push(instructions);
@@ -202,9 +202,9 @@
           var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
           var rt = Math.round(correct_trials.select('rt').mean());
 
-          return "<p>You responded correctly on "+accuracy+"% of the trials.</p>"+
-          "<p>Your average response time was "+rt+"ms.</p>"+
-          "<p>Press any key to complete the session. Thank you!</p>";
+          return "<p>Du hast in "+accuracy+"% der Versuche korrekt entschieden.</p>"+
+          "<p>Deine durchschnittliche Reaktionszeit war  "+rt+"ms.</p>"+
+          "<p>Dr&uuml;cke eine beliebige Taste, um die Session zu beenden. Vielen Dank!</p>";
 
         }
       };
