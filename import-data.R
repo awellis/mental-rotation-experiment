@@ -26,7 +26,7 @@ data_object %>% group_by(angle) %>%
     summarise(N = length(age))
 
 data <- bind_rows(data_self, data_object) %>%
-    mutate(rt = rt/1000)
+    mutate(rt = as.numeric(rt)/1000)
 
 data %>% group_by(condition, angle) %>%
     summarise(meanrt = mean(rt))
