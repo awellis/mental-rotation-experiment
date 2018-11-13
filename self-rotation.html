@@ -92,7 +92,7 @@
       /* define the self rotation instruction trial */
       var instructions = {
         type: "html-keyboard-response",
-        stimulus: "<p> Stell dir vor, dass der Tisch vor dir station&auml;r ist, und du dich entlang des Pfeils um den Tisch bewegst. Wenn du am Ende des Pfeils angekommen bist, schau zur Tischmitte. </p>  <p>Entscheide dann, ob der Ball von deiner neuen (vorgestellten) Position links oder rechts von dir liegt.</p> <p>Dr&uuml;cke die 'f'-Taste f&uuml;r links, die 'j'-Taste f&uuml;r rechts.</p>",
+        stimulus: "<p> Stell dir vor, dass du vor einem runden Tisch stehst, auf dem sich ein blauer Ball am Tischrand befindet. Entlang des Tischrands ist jeweils ein verschieden langer Pfeil. Nun bewegst du dich entlang dieses Pfeils bis an seine Spitze. Wenn du am Ende des Pfeils angekommen bist, schau zur Tischmitte. </p> <img src='img/90_180.png'></img> <br> <p>Entscheide dann, ob der Ball von deiner neuen (vorgestellten) Position links oder rechts von dir liegt.</p> <p>Dr&uuml;cke die <strong>'f'</strong>-Taste f&uuml;r links, die <strong>'j'</strong>-Taste f&uuml;r rechts.</p> <br><p> Das Bild wird jeweils 1 Sekunde lang pr&auml;sentiert. Du hast 3 Sekunden Zeit eine Entscheidung zu treffen.</p>",
         post_trial_gap: 1000
       };
       timeline.push(instructions);
@@ -187,7 +187,7 @@
         timeline: [fixation, exp],
         timeline_variables: stimuli,
         randomize_order: true,
-        repetitions: 1
+        repetitions: 4
       }
 
       timeline.push(procedure);
